@@ -99,7 +99,7 @@ from jinja2 import Template
 app = FastAPI()
 
 # Подключение к Proxmox API
-proxmox = ProxmoxAPI('192.168.89.11', user='root@pam', password='123123', verify_ssl=False)
+proxmox = ProxmoxAPI('192.168.75.11', user='root@pam', password='123123', verify_ssl=False)
 
 # Чтение HTML-шаблона
 with open("temp.html") as f:
@@ -151,22 +151,19 @@ async def delete_vm(node: str = Form(...), vmid: str = Form(...)):
 
 @app.post("/start_vm")
 async def start_vm(node: str = Form(...), vmid: str = Form(...)):
-    # Добавьте код для старта виртуальной машины
-    #
-    #
-    #
+    # Старт виртуальной машины
+    proxmox.nodes(node).qemu(vmid).status.start.post()
     return {"message": f"VM {vmid} started on node {node}"}
 
 @app.post("/stop_vm")
 async def stop_vm(node: str = Form(...), vmid: str = Form(...)):
-    # Добавьте код для остановки виртуальной машины
-    #
-    #
-    #
+    # Остановка виртуальной машины
+    proxmox.nodes(node).qemu(vmid).status.stop.post()
     return {"message": f"VM {vmid} stopped on node {node}"}
 
 if __name__ == '__main__':
     import uvicorn
+    # лошади с больщими хуями
     uvicorn.run(app, host='0.0.0.0', port=8000)
 
 ```
