@@ -1,0 +1,11 @@
+groups:
+  - name: network_alerts
+    rules:
+      - alert: HighNetworkTraffic
+        expr: rate(container_network_receive_bytes_total{image!=""}[5m]) / 1024 / 1024 > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Обнаружен высокий входящий сетевой трафик"
+          description: "Входящий сетевой трафик превышает 100 МБ за последние 5 минут для контейнера {{ $labels.container }}."
